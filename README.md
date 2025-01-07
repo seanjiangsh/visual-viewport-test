@@ -4,6 +4,11 @@ Testing [visualViewport](https://developer.mozilla.org/en-US/docs/Web/API/Visual
 
 This monorepo contains two projects built with Vite and TypeScript:
 
+## Live Demo
+
+- [Vanilla JS](https://seanjiangsh.github.io/visual-viewport-test/vanilla)
+- [React](https://seanjiangsh.github.io/visual-viewport-test/react)
+
 ## Projects
 
 ### 1. Vanilla SPA
