@@ -23,6 +23,9 @@ function updateViewportSize() {
     <p>Width: ${width}</p>
     <p>Height: ${height}</p>
   `;
+
+  // This is a demo project, update body size directly for simplicity
+  // use the width and height for your own purposes :)
   const bodyStyle = document.body.style;
   bodyStyle.width = `${width}px`;
   bodyStyle.height = `${height}px`;
@@ -31,7 +34,7 @@ function updateViewportSize() {
 }
 
 function fixScroll() {
-  window.scrollTo(0, 0);
+  scrollTo(0, 0);
 }
 
 if (visualViewport) {

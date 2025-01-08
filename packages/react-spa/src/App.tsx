@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
+import useViewportSize from "./useViewportSize";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [inputValue, setInputValue] = useState("");
+  const viewportSize = useViewportSize();
+
+  // This is a demo project, update body size directly for simplicity
+  // use the width and height for your own purposes :)
+  useEffect(() => {
+    const [width, height] = viewportSize;
+    const bodyStyle = document.body.style;
+    bodyStyle.width = `${width}px`;
+    bodyStyle.height = `${height}px`;
+  }, [viewportSize]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div id="app">
+      <h1>VisualViewport Test</h1>
+      <div id="content">
+        <input
+          type="text"
+          placeholder="This is an input"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+        <div id="output">
+          {viewportSize && (
+            <>
+              <p>Width: {viewportSize[0]}</p>
+              <p>Height: {viewportSize[1]}</p>
+            </>
+          )}
+          <p>{inputValue}</p>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
