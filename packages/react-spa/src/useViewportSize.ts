@@ -10,12 +10,18 @@ type Height = number;
 type Size = [Width, Height];
 
 export const getViewportSize = (): Size => {
+  let width = window.innerWidth;
+  let height = window.innerHeight;
+
   if (window.visualViewport) {
-    const { width, height } = window.visualViewport;
-    return [width, height] as const;
+    width = window.visualViewport.width;
+    height = window.visualViewport.height;
   }
 
-  return [window.innerWidth, window.innerHeight] as const;
+  width = Math.round(width);
+  height = Math.round(height);
+
+  return [width, height];
 };
 
 export const fixScroll = () => scrollTo(0, 0);

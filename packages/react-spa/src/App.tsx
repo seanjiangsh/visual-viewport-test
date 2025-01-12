@@ -2,17 +2,21 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import useViewportSize from "./useViewportSize";
 
+const appMargin = 20;
+
 function App() {
   const [inputValue, setInputValue] = useState("");
   const viewportSize = useViewportSize();
 
-  // This is a demo project, update body size directly for simplicity
+  // This is a demo project, update app size directly for simplicity
   // use the width and height for your own purposes :)
   useEffect(() => {
     const [width, height] = viewportSize;
-    const bodyStyle = document.body.style;
-    bodyStyle.width = `${width}px`;
-    bodyStyle.height = `${height}px`;
+    const appElement = document.querySelector("#app") as HTMLElement | null;
+    if (appElement) {
+      appElement.style.width = `${width - appMargin * 2}px`;
+      appElement.style.height = `${height - appMargin * 2}px`;
+    }
   }, [viewportSize]);
 
   return (
