@@ -4,6 +4,22 @@ Testing [visualViewport](https://developer.mozilla.org/en-US/docs/Web/API/Visual
 
 This monorepo contains two projects built with Vite and TypeScript:
 
+## The Problem
+
+When the virtual keyboard is opened on iOS, the whole page is pushed up and some part of the page is hidden. This behavior sometimes are not desired, especially when the page is a single-page application.
+
+<p align="center">
+  <img src="./assets/without-visualViewport.gif" alt="without-visualViewport" style="max-width: 30%;">
+</p>
+
+## The Solution
+
+The `visualViewport` API provides information about the visual viewport of a window. It can be used to detect the virtual keyboard resizing and adjust the layout accordingly.
+
+<p align="center">
+  <img src="./assets/with-visualViewport.gif" alt="with-visualViewport" style="max-width: 30%;">
+</p>
+
 ## Live Demo
 
 - [Vanilla JS](https://seanjiangsh.github.io/visual-viewport-test/vanilla)
