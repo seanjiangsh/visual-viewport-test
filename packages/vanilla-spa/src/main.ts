@@ -9,24 +9,24 @@ function updateViewportSize() {
 
   let width, height;
 
+  output.innerHTML = `
+  <p>Window inner size: W: ${window.innerWidth}, H: ${window.innerHeight}</p>
+`;
+
   if (visualViewport) {
-    width = visualViewport.width;
-    height = visualViewport.height;
-    output.innerHTML = "<p>Visual viewport size:</p>";
+    width = Math.round(visualViewport.width);
+    height = Math.round(visualViewport.height);
+    output.innerHTML += `<p>Visual viewport size: W: ${width}, H: ${height}</p>`;
+
+    const isKeyboardOpened = height < window.innerHeight;
+    output.innerHTML += `
+    <p>Virtual keyboard opened: ${isKeyboardOpened ? "Yes" : "No"}</p>
+  `;
   } else {
     width = window.innerWidth;
     height = window.innerHeight;
-    output.innerHTML =
-      "<p>Visual viewport API is not supported. Using window inner size.</p>";
+    output.innerHTML = "<p>Visual viewport API is not supported</p>";
   }
-
-  width = Math.round(width);
-  height = Math.round(height);
-
-  output.innerHTML += `
-    <p>Width: ${width}</p>
-    <p>Height: ${height}</p>
-  `;
 
   // This is a demo project, update app size directly for simplicity
   // use the width and height for your own purposes :)

@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "pnpm -r dev --host",
+    "dev:vanilla": "pnpm --filter vanilla-spa dev --host",
+    "dev:react": "pnpm --filter react-spa dev --host",
     "build": "pnpm -r build",
     "predeploy:vanilla": "pnpm --filter vanilla-spa build",
     "predeploy:react": "pnpm --filter react-spa build",

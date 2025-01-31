@@ -24,13 +24,13 @@ export const getViewportSize = (): Size => {
   return [width, height];
 };
 
-export const fixScroll = () => scrollTo(0, 0);
+const fixScroll = () => scrollTo(0, 0);
 
 /**
  * Returns the viewport size. This can also be used as a dependency in a
  * useEffect to trigger an update when the browser resizes.
  */
-const useViewportSize = () => {
+export const useViewportSize = () => {
   const [viewportSize, setViewportSize] = useState<Size>(getViewportSize());
 
   const updateViewportSize = useCallback(() => {
@@ -85,4 +85,40 @@ const useViewportSize = () => {
   return viewportSize;
 };
 
-export default useViewportSize;
+/**
+ * Hook to detect if the virtual keyboard is opened on mobile devices.
+ * Returns undefined if the visualViewport API is not available.
+ */
+export const useVirtualKeyboardOpened = () => {
+  const [isKeyboardOpened, setIsKeyboardOpened] = useState<boolean | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const { visualViewport } = window;
+
+    // Will return undefined because desktop browsers don't have a virtual keyboard
+    // or if the visualViewport API is not available
+    if (!isMobile || !visualViewport) {
+      setIsKeyboardOpened(undefined);
+      return;
+    }
+
+    const onResize = () => {
+      const isKeyboardOpened = visualViewport.height < window.innerHeight;
+      setIsKeyboardOpened(isKeyboardOpened);
+    };
+
+    visualViewport.addEventListener("resize", onResize);
+
+    // Initial check after 500ms
+    setTimeout(onResize, 500);
+
+    return () => {
+      visualViewport.removeEventListener("resize", onResize);
+    };
+  }, []);
+
+  return isKeyboardOpened;
+};

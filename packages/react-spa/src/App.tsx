@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import useViewportSize from "./useViewportSize";
+import { useViewportSize, useVirtualKeyboardOpened } from "./useViewport";
 
 const appMargin = 20;
 
 function App() {
   const [inputValue, setInputValue] = useState("");
   const viewportSize = useViewportSize();
+  const isVirtualKeyboardOpened = useVirtualKeyboardOpened();
 
   // This is a demo project, update app size directly for simplicity
   // use the width and height for your own purposes :)
@@ -30,12 +31,24 @@ function App() {
           onChange={(e) => setInputValue(e.target.value)}
         />
         <div id="output">
+          {
+            <p>
+              Window inner size: W: {window.innerWidth}, H: {window.innerHeight}
+            </p>
+          }
           {viewportSize && (
-            <>
-              <p>Width: {viewportSize[0]}</p>
-              <p>Height: {viewportSize[1]}</p>
-            </>
+            <p>
+              Visual viewport size: W: {viewportSize[0]}, H: {viewportSize[1]}
+            </p>
           )}
+          <p>
+            Virtual keyboard opened:
+            {isVirtualKeyboardOpened === undefined
+              ? "Unknown"
+              : isVirtualKeyboardOpened
+              ? "Yes"
+              : "No"}
+          </p>
           <p>{inputValue}</p>
         </div>
       </div>
