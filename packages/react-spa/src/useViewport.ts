@@ -5,9 +5,7 @@ import { useCallback, useEffect, useState, useLayoutEffect } from "react";
 const useBrowserLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : () => {};
 
-type Width = number;
-type Height = number;
-type Size = [Width, Height];
+export type Size = { width: number; height: number };
 
 export const getViewportSize = (): Size => {
   let width = window.innerWidth;
@@ -21,7 +19,7 @@ export const getViewportSize = (): Size => {
   width = Math.round(width);
   height = Math.round(height);
 
-  return [width, height];
+  return { width, height };
 };
 
 const fixScroll = () => scrollTo(0, 0);
@@ -39,8 +37,8 @@ export const useViewportSize = () => {
     setViewportSize((oldViewportSize) => {
       if (
         oldViewportSize &&
-        oldViewportSize[0] === viewportSize[0] &&
-        oldViewportSize[1] === viewportSize[1]
+        oldViewportSize.width === viewportSize.width &&
+        oldViewportSize.height === viewportSize.height
       ) {
         // Maintain old instance to prevent unnecessary updates
         return oldViewportSize;
