@@ -8,9 +8,7 @@ body {
 
 #app {
   text-align: center;
-  margin: 20px;
-  width: calc(100dvw - 40px);
-  height: calc(100dvh - 40px);
+  margin: 10px;
   background: #eee;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   border-radius: 8px;
@@ -20,8 +18,15 @@ body {
   align-items: center;
 }
 
-h1 {
+h3 {
   margin: 10px;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
 }
 
 input {

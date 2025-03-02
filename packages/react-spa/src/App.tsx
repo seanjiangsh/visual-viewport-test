@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import { useViewportSize, useVirtualKeyboardOpened } from "./useViewport";
 
-const appMargin = 20;
+const appMargin = 10;
 
 function App() {
-  const [inputValue, setInputValue] = useState("");
+  const [inputElem, setInputElem] = useState<HTMLInputElement | null>(null);
   const viewportSize = useViewportSize();
-  const isVirtualKeyboardOpened = useVirtualKeyboardOpened();
+  const isVirtualKeyboardOpened = useVirtualKeyboardOpened(inputElem);
 
   // This is a demo project, update app size directly for simplicity
   // use the width and height for your own purposes :)
@@ -22,26 +22,9 @@ function App() {
 
   return (
     <div id="app">
-      <h1>VisualViewport Test</h1>
+      <h3>VisualViewport Test</h3>
       <div id="content">
-        <input
-          type="text"
-          placeholder="This is an input"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
         <div id="output">
-          {
-            <p>
-              Window inner size: W: {window.innerWidth}, H: {window.innerHeight}
-            </p>
-          }
-          {viewportSize && (
-            <p>
-              Visual viewport size: W: {viewportSize.width}, H:
-              {viewportSize.height}
-            </p>
-          )}
           <p>
             Virtual keyboard opened:
             {isVirtualKeyboardOpened === undefined
@@ -49,9 +32,20 @@ function App() {
               : isVirtualKeyboardOpened
               ? "Yes"
               : "No"}
+            {
+              <p>
+                Window inner size: W:{window.innerWidth}, H:{window.innerHeight}
+              </p>
+            }
+            {viewportSize && (
+              <p>
+                Visual viewport size: W:{viewportSize.width}, H:
+                {viewportSize.height}
+              </p>
+            )}
           </p>
-          <p>{inputValue}</p>
         </div>
+        <input ref={setInputElem} type="text" placeholder="This is an input" />
       </div>
     </div>
   );

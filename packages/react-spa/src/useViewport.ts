@@ -1,6 +1,12 @@
 // Source: https://martijnhols.nl/blog/how-to-get-document-height-ios-safari-osk
 
-import { useCallback, useEffect, useState, useLayoutEffect } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useRef,
+} from "react";
 
 const useBrowserLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : () => {};
@@ -87,36 +93,54 @@ export const useViewportSize = () => {
  * Hook to detect if the virtual keyboard is opened on mobile devices.
  * Returns undefined if the visualViewport API is not available.
  */
-export const useVirtualKeyboardOpened = () => {
+export const useVirtualKeyboardOpened = (
+  inputElem: HTMLInputElement | null
+) => {
   const [isKeyboardOpened, setIsKeyboardOpened] = useState<boolean | undefined>(
     undefined
+  );
+  const initialViewportHeightRef = useRef<number | undefined>(
+    visualViewport?.height
   );
 
   useEffect(() => {
     const isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-    const { visualViewport } = window;
 
-    // Will return undefined because desktop browsers don't have a virtual keyboard
-    // or if the visualViewport API is not available
-    if (!isMobile || !visualViewport) {
+    if (
+      !isMobile ||
+      !visualViewport ||
+      !inputElem ||
+      initialViewportHeightRef.current === undefined
+    ) {
       setIsKeyboardOpened(undefined);
       return;
     }
 
+    const onBlur = () => {
+      setIsKeyboardOpened(false);
+    };
+
     const onResize = () => {
-      const isKeyboardOpened = visualViewport.height < window.innerHeight;
+      const visualVpHeight = visualViewport?.height;
+      const initVpHeight = initialViewportHeightRef.current;
+      if (visualVpHeight === undefined || initVpHeight === undefined) return;
+
+      const isActiveElement = document.activeElement === inputElem;
+      const isViewportHeightSmaller = visualVpHeight < initVpHeight;
+      const isKeyboardOpened = isActiveElement && isViewportHeightSmaller;
+
       setIsKeyboardOpened(isKeyboardOpened);
     };
 
+    inputElem.addEventListener("blur", onBlur);
     visualViewport.addEventListener("resize", onResize);
-
-    // Initial check after 500ms
-    setTimeout(onResize, 500);
+    onResize();
 
     return () => {
-      visualViewport.removeEventListener("resize", onResize);
+      inputElem.removeEventListener("blur", onBlur);
+      visualViewport?.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [inputElem]);
 
   return isKeyboardOpened;
 };
