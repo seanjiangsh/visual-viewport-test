@@ -1,39 +1,41 @@
 import "./style.css";
 
 const { visualViewport } = window;
-const appMargin = 20;
+const appMargin = 10;
+const initVpHeight = visualViewport?.height;
 
 function updateViewportSize() {
   const output = document.querySelector("#output");
   if (!output) return;
 
-  let width, height;
-
-  output.innerHTML = `
-  <p>Window inner size: W: ${window.innerWidth}, H: ${window.innerHeight}</p>
-`;
-
   if (visualViewport) {
-    width = Math.round(visualViewport.width);
-    height = Math.round(visualViewport.height);
-    output.innerHTML += `<p>Visual viewport size: W: ${width}, H: ${height}</p>`;
+    const visualVpHeight = visualViewport?.height;
+    if (visualVpHeight === undefined || initVpHeight === undefined) return;
 
-    const isKeyboardOpened = height < window.innerHeight;
-    output.innerHTML += `
+    const inputElem = document.querySelector("input");
+    const isActiveElement = document.activeElement === inputElem;
+    const isViewportHeightSmaller = visualVpHeight < initVpHeight;
+    const isKeyboardOpened = isActiveElement && isViewportHeightSmaller;
+
+    output.innerHTML = `
     <p>Virtual keyboard opened: ${isKeyboardOpened ? "Yes" : "No"}</p>
+    `;
+    output.innerHTML += `<p>Visual viewport size: W: ${visualViewport.width}, H: ${visualVpHeight}</p>`;
+    output.innerHTML += `
+    <p>Window inner size: W:${window.innerWidth}, H:${window.innerHeight}</p>
   `;
   } else {
-    width = window.innerWidth;
-    height = window.innerHeight;
     output.innerHTML = "<p>Visual viewport API is not supported</p>";
   }
 
   // This is a demo project, update app size directly for simplicity
   // use the width and height for your own purposes :)
+  const width = visualViewport?.width || window.innerWidth;
+  const height = visualViewport?.height || window.innerHeight;
   const appElement = document.querySelector("#app") as HTMLElement | null;
   if (appElement) {
-    appElement.style.width = `${width - appMargin * 2}px`;
-    appElement.style.height = `${height - appMargin * 2}px`;
+    appElement.style.width = `${Math.round(width) - appMargin * 2}px`;
+    appElement.style.height = `${Math.round(height) - appMargin * 2}px`;
   }
 
   fixScroll();
